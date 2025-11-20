@@ -26,39 +26,27 @@ env:
   NEXT_PUBLIC_BASE_PATH: ${{ vars.BASE_PATH }}
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
-      # Node.jsの準備
       - uses: actions/checkout@v4
-      - name: Use Node.js v20
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: "npm"
-      # インストール
       - run: npm ci
-      # ビルド
-      - run: npm run build --if-present
-
-      # 成果物の確認
-      - name: Check out/ directory
-        run: ls -la ./out/
-
-      # デプロイ
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - run: npm run build
+      - run: ls -la ./out/
+      - uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
           path: './out/'
           name: github-pages
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/configure-pages@v4
+      - uses: actions/deploy-pages@v2
+        with:
+          artifact_name: github-pages
 
 
