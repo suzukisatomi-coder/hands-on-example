@@ -56,7 +56,7 @@ jobs:
         with:
           # Upload entire repository
           path: './out/'
-          artifact: github-pages
+          aname: github-pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
