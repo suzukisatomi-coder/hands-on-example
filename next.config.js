@@ -1,13 +1,16 @@
 /** @type {import('next').NextConfig} */
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+// 重要: リポジトリ名を正確に反映したbasePath
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/hands-on-example'; // リポジトリ名を入れてください
+
 const nextConfig = {
   output: "export",
-  basePath:basePath,
-  // Optional: Add a trailing slash to all paths `/about` -> `/about/`
-  // trailingSlash: true,
-  // Optional: Change the output directory `out` -> `dist`
-  // distDir: 'dist',
+  basePath: basePath,
+  assetPrefix: basePath,  // 明示的に設定
+  trailingSlash: true,    // ルーティングの安定性向上
+  images: {
+    unoptimized: true,    // GitHub Pages対応
+  }
 };
 
 module.exports = nextConfig;
